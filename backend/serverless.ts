@@ -19,7 +19,7 @@ const serverlessConfiguration: AWS = {
     dynamodb: {
       stages: ['${self:custom.stage}'],
       start: {
-        port: 8008,
+        port: 8000,
         inMemory: true,
         migrate: true
       }

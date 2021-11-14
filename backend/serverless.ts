@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 
 import { hello } from './src/functions';
 import { getPlaces } from './src/functions';
+import { postPlaces } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -12,7 +13,7 @@ const serverlessConfiguration: AWS = {
       includeModules: true
     }
   },
-  plugins: ['serverless-webpack','serverless-offline'],
+  plugins: ['serverless-webpack', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -25,7 +26,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { hello, getPlaces }
+  functions: { hello, getPlaces, postPlaces }
 }
 
 module.exports = serverlessConfiguration;

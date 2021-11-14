@@ -4,6 +4,7 @@ import { hello } from './src/functions';
 import { getPlaces } from './src/functions';
 import { postPlaces } from './src/functions';
 import { putPlace } from './src/functions';
+import { deletePlace } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -27,7 +28,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { hello, getPlaces, postPlaces, putPlace }
+  functions: { hello, getPlaces, postPlaces, putPlace, deletePlace }
 }
 
 module.exports = serverlessConfiguration;

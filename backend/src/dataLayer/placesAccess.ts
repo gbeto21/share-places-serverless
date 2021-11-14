@@ -3,8 +3,6 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { createLogger } from '../utils/logger'
 import { Place } from "../models/Place";
 
-const AWSXRay = require('aws-xray-sdk')
-const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('TodosAccess')
 
 export class PlacesAccess {
@@ -34,11 +32,11 @@ export class PlacesAccess {
 function createDynamoDBClient(): AWS.DynamoDB.DocumentClient {
     if (process.env.IS_OFFLINE) {
         logger.info('Creating a local DynamoDB instance')
-        return new XAWS.DynamoDB.DocumentClient({
+        return new AWS.DynamoDB.DocumentClient({
             region: 'localhost',
             endpoint: 'http://localhost:8000'
         })
     }
 
-    return new XAWS.DynamoDB.DocumentClient()
+    return new AWS.DynamoDB.DocumentClient()
 }

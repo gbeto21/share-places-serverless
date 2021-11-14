@@ -12,7 +12,8 @@
     "aws-sdk": "^2.1028.0",
     "aws-xray-sdk": "^3.3.4",
     "serverless-dynamodb-local": "^0.2.40",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.16.0",

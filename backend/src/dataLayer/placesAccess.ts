@@ -7,7 +7,7 @@ const AWSXRay = require('aws-xray-sdk')
 const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('TodosAccess')
 
-export class PlacesAcces {
+export class PlacesAccess {
     constructor(private readonly docClient: DocumentClient = createDynamoDBClient(),
         private readonly placesTable = process.env.PLACE_TABLE,
         private readonly s3 = new AWS.S3({ signatureVersion: 'v4' }),

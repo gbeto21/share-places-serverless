@@ -3,15 +3,17 @@ import { middyfy } from '@libs/lambda'
 import { postPlace } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { PostPlaceRequest } from 'src/requests/PostPlaceRequest';
+import { getToken } from 'src/utils/auth/auth';
 
 const logger = createLogger('Handler logger')
 
 const handler: any = async (event) => {
 
     try {
-        
+
         const parsedPlace: PostPlaceRequest = event.body
-        const place = await postPlace('userId', parsedPlace)
+        const jwtToken = getToken(event)
+        const place = await postPlace(jwtToken, parsedPlace)
         logger.info('Place created', place)
         return {
             statusCode: 201,

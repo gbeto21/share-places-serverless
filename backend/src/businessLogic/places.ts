@@ -4,6 +4,7 @@ import { createLogger } from "../utils/logger";
 import { v4 as uuidv4 } from 'uuid';
 import { PostPlaceRequest } from "src/requests/PostPlaceRequest";
 import { PutPlaceRequest } from "src/requests/PutPlaceRequest";
+import { parseUserId } from "src/utils/auth/utils";
 
 const logger = createLogger('places')
 const placessAccess = new PlacesAccess()
@@ -15,7 +16,7 @@ export async function getPlaces(pJWT: string): Promise<Place[]> {
 }
 
 export async function postPlace(pJWT: string, pPlace: PostPlaceRequest) {
-    const userId = pJWT
+    const userId = parseUserId(pJWT)
     const placeId = uuidv4()
 
     const place = {

@@ -9,8 +9,7 @@ const logger = createLogger('Handler logger')
 const handler: any = async (event) => {
 
     try {
-        console.log('Parsing body', event.body);
-
+        
         const parsedPlace: PostPlaceRequest = event.body
         const place = await postPlace('userId', parsedPlace)
         logger.info('Place created', place)

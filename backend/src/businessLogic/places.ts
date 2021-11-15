@@ -3,6 +3,7 @@ import { Place } from "../models/Place";
 import { createLogger } from "../utils/logger";
 import { v4 as uuidv4 } from 'uuid';
 import { PostPlaceRequest } from "src/requests/PostPlaceRequest";
+import { PutPlaceRequest } from "src/requests/PutPlaceRequest";
 
 const logger = createLogger('places')
 const placesAccess = new PlacesAccess()
@@ -28,4 +29,12 @@ export async function postPlace(pJWT: string, pPlace: PostPlaceRequest) {
     const placeResult = placesAccess.postPlace(place)
     return placeResult
 
+}
+
+export async function putPlace(
+    jwkToken: string,
+    placeId: string,
+    placeBody: PutPlaceRequest) {
+    const result = placesAccess.putPlace(jwkToken, placeId, placeBody)
+    return result
 }

@@ -2,6 +2,7 @@ import * as AWS from 'aws-sdk'
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { createLogger } from '../utils/logger'
 import { Place } from "../models/Place";
+import { PutPlaceRequest } from 'src/requests/PutPlaceRequest';
 
 const logger = createLogger('TodosAccess')
 
@@ -37,6 +38,59 @@ export class PlacesAccess {
         return place
     }
 
+    async putPlace(
+        userId: string,
+        placeId: string,
+        placeParse: PutPlaceRequest
+    ) {
+        let result = {
+            statusCode: 200,
+            body: ''
+        }
+
+        let placeToBeUpdate = await this.docClient
+            .query({
+                TableName: this.placesTable,
+                KeyConditionExpression: 'userId = :userId AND placeId = :placeId',
+                ExpressionAttributeValues: {
+                    ':userId': userId,
+                    ':placeId': placeId
+                }
+            })
+            .promise()
+
+        logger.info('Place to be upated', placeToBeUpdate)
+
+        if (placeToBeUpdate.Items.length === 0) {
+            result = {
+                statusCode: 404,
+                body: 'The place to be upate was not found'
+            }
+            return result
+        }
+
+        await this.docClient
+            .update({
+                TableName: this.placesTable,
+                Key: {
+                    userId,
+                    placeId
+                },
+                UpdateExpression: 'set #name =:name, #description =:description',
+                ExpressionAttributeValues: {
+                    ':name': placeParse.name,
+                    ':description': placeParse.description
+                },
+                ExpressionAttributeNames: {
+                    '#name': 'name',
+                    '#description': 'description'
+                },
+                ReturnValues: 'UPDATED_NEW'
+            })
+            .promise()
+
+        return result
+    }
 }
 
 function createDynamoDBClient(): AWS.DynamoDB.DocumentClient {

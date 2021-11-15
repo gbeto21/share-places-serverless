@@ -5,6 +5,9 @@ export default {
       http: {
         method: 'get',
         path: 'signedUrl/{placeId}',
+        authorizer: {
+          name: 'auth'
+        },
         request: {}
       }
     }

@@ -52,6 +52,7 @@ export async function deletePlace(
 }
 
 export async function generateUploadURL(jwtToken: string, placeId: string) {
-    const result = placessAccess.generateUploadURL(jwtToken, placeId)
+    const userId = parseUserId(jwtToken)
+    const result = placessAccess.generateUploadURL(userId, placeId)
     return result
 }

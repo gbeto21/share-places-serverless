@@ -6,6 +6,7 @@ import { postPlaces } from './src/functions';
 import { putPlace } from './src/functions';
 import { deletePlace } from './src/functions';
 import { getSignedUrl } from './src/functions';
+import { auth } from './src/functions'
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -51,7 +52,15 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { hello, getPlaces, postPlaces, putPlace, deletePlace, getSignedUrl },
+  functions: {
+    hello,
+    auth,
+    getPlaces,
+    postPlaces,
+    putPlace,
+    deletePlace,
+    getSignedUrl
+  },
   resources: {
     Resources: {
       PlaceTable: {

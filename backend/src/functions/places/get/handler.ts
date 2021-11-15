@@ -8,8 +8,8 @@ const logger = createLogger('Handler logger')
 const handler: any = async (event) => {
 
   try {
-    const places = getPlaces('userId')
- 
+    const places = await getPlaces('userId')
+
     return {
       statusCode: 201,
       body: JSON.stringify({ places })

@@ -27,6 +27,16 @@ export class PlacesAccess {
         return places as Place[]
     }
 
+    async postPlace(place: Place): Promise<Place> {
+        await this.docClient
+            .put({
+                TableName: this.placesTable,
+                Item: place
+            })
+            .promise()
+        return place
+    }
+
 }
 
 function createDynamoDBClient(): AWS.DynamoDB.DocumentClient {

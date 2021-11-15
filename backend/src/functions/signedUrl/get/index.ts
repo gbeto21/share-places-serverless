@@ -4,7 +4,7 @@ export default {
       {
         http: {
           method: 'get',
-          path: 'signedUrl',
+          path: 'signedUrl/{placeId}',
           request: {}
         }
       }

@@ -45,7 +45,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       PLACE_TABLE: 'Place-${self:custom.stage}',
-      ATTACHMENT_S3_BUCKET: 'Places-${self:custom.stage}',
+      ATTACHMENT_S3_BUCKET: 'places-${self:custom.stage}',
       SIGNED_URL_EXPIRATION: '650',
       TABLE_THROUGHPUT: '1'
     },

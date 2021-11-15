@@ -135,6 +135,61 @@ export class PlacesAccess {
         return result
     }
 
+    async generateUploadURL(userId, placeId) {
+        let result = {
+            statusCode: 201,
+            body: ''
+        }
+
+        let checkIfExist = await this.docClient
+            .query({
+                TableName: this.placesTable,
+                KeyConditionExpression: 'userId = :userId AND placeId = :placeId',
+                ExpressionAttributeValues: {
+                    ':userId': userId,
+                    ':placeId': placeId
+                }
+            })
+            .promise()
+
+        if (checkIfExist.Items.length === 0) {
+            result = {
+                statusCode: 404,
+                body: 'The place to be update was not found'
+            }
+            return result
+        }
+
+        console.log("Updating the place.");
+
+        await this.docClient
+            .update({
+                TableName: this.placesTable,
+                Key: {
+                    userId,
+                    placeId
+                },
+                UpdateExpression: 'set #imageUrl =:imageUrl',
+                ExpressionAttributeValues: {
+                    ':imageUrl': `https://${this.s3Bucket}.s3.amazonaws.com/${placeId}`
+                },
+                ExpressionAttributeNames: { '#imageUrl': 'imageUrl' },
+                ReturnValues: 'ALL_OLD'
+            })
+            .promise()
+
+        console.log("Generating the signedURL");
+
+        result.body = this.s3.getSignedUrl('putObject', {
+            Bucket: this.s3Bucket,
+            Key: placeId,
+            Expires: parseInt(this.urlExpiration)
+        })
+
+        return result
+
+    }
+
 }
 
 function createDynamoDBClient(): AWS.DynamoDB.DocumentClient {

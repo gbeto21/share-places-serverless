@@ -44,7 +44,8 @@ export async function deletePlace(
     jwkToken: string,
     placeId: string,
 ) {
-    const toReturn = placessAccess.deletePlace(jwkToken, placeId)
+    const userId = parseUserId(jwkToken)
+    const toReturn = placessAccess.deletePlace(userId, placeId)
 
     return toReturn
 }

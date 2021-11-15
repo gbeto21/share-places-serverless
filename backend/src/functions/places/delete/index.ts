@@ -5,6 +5,9 @@ export default {
       http: {
         method: 'delete',
         path: 'places/{placeId}',
+        authorizer: {
+          name: 'auth'
+        },
         request: {}
       }
     }

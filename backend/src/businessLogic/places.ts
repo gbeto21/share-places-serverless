@@ -10,9 +10,9 @@ const logger = createLogger('places')
 const placessAccess = new PlacesAccess()
 
 export async function getPlaces(pJWT: string): Promise<Place[]> {
-    // const userId = parseUserId(jwkToken);
+    const userId = parseUserId(pJWT);
     logger.info('Getting places from places logic.')
-    return placessAccess.getPlaces(pJWT)
+    return placessAccess.getPlaces(userId)
 }
 
 export async function postPlace(pJWT: string, pPlace: PostPlaceRequest) {

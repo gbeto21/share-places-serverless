@@ -11,8 +11,8 @@ const handler: any = async (event) => {
   try {
     const jwtToken = getToken(event)
     let places = []
-    if(jwtToken){
-      places = await getPlaces('userId')
+    if (jwtToken) {
+      places = await getPlaces(jwtToken)
     }
 
     return {

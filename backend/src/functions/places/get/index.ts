@@ -5,6 +5,9 @@ export default {
       http: {
         method: 'get',
         path: 'places',
+        authorizer: {
+          name: 'auth'
+        },
         request: {}
       }
     }

@@ -2,13 +2,18 @@ import 'source-map-support/register';
 import { middyfy } from '@libs/lambda';
 import { getPlaces } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
+import { getToken } from 'src/utils/auth/auth';
 
 const logger = createLogger('Handler logger')
 
 const handler: any = async (event) => {
 
   try {
-    const places = await getPlaces('userId')
+    const jwtToken = getToken(event)
+    let places = []
+    if(jwtToken){
+      places = await getPlaces('userId')
+    }
 
     return {
       statusCode: 201,

@@ -91,6 +91,50 @@ export class PlacesAccess {
 
         return result
     }
+
+    async deletePlace(userId: string, placeId: string) {
+        let result = {
+            statusCode: 200,
+            body: ''
+        }
+
+        let placeToBeDeleted = await this.docClient
+            .query({
+                TableName: this.placesTable,
+                KeyConditionExpression: 'userId = :userId AND placeId = :placeId',
+                ExpressionAttributeValues: {
+                    ':userId': userId,
+                    ':placeId': placeId
+                }
+            })
+            .promise()
+
+        if (placeToBeDeleted.Items.length === 0) {
+            result.statusCode = 404
+            result.body = 'The place to be deleted was not found.'
+        }
+
+        await this.docClient
+            .delete({
+                TableName: this.placesTable,
+                Key: {
+                    userId,
+                    placeId
+                }
+            })
+            .promise()
+
+        //TODO: Implement this logic.
+        // await this.s3
+        //     .deleteObject({
+        //         Bucket: this.s3Bucket,
+        //         Key: placeId
+        //     })
+        //     .promise()
+
+        return result
+    }
+
 }
 
 function createDynamoDBClient(): AWS.DynamoDB.DocumentClient {

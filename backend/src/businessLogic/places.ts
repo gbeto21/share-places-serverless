@@ -38,3 +38,12 @@ export async function putPlace(
     const result = placesAccess.putPlace(jwkToken, placeId, placeBody)
     return result
 }
+
+export async function deletePlace(
+    jwkToken: string,
+    placeId: string,
+) {
+    const toReturn = placesAccess.deletePlace(jwkToken, placeId)
+
+    return toReturn
+}

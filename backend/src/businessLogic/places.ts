@@ -36,7 +36,8 @@ export async function putPlace(
     jwkToken: string,
     placeId: string,
     placeBody: PutPlaceRequest) {
-    const result = placessAccess.putPlace(jwkToken, placeId, placeBody)
+    const userId = parseUserId(jwkToken)
+    const result = placessAccess.putPlace(userId, placeId, placeBody)
     return result
 }
 

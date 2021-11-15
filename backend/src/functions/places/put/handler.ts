@@ -3,6 +3,7 @@ import { middyfy } from '@libs/lambda'
 import { putPlace } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { PutPlaceRequest } from "src/requests/PutPlaceRequest";
+import { getToken } from 'src/utils/auth/auth';
 
 const logger = createLogger('Put place logger')
 
@@ -20,7 +21,8 @@ const handler: any = async (event) => {
             parsePlace
         })
 
-        const result = await putPlace('userId', placeId, parsePlace)
+        const jwtToken = getToken(event)
+        const result = await putPlace(jwtToken, placeId, parsePlace)
         logger.info('Place updated', result)
 
         return {

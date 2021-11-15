@@ -7,6 +7,9 @@ export default {
       http: {
         method: 'put',
         path: 'places/{placeId}',
+        authorizer: {
+          name: 'auth'
+        },
         request: {
           schema: {
             'application/json': schema

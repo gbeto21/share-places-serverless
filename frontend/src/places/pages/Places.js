@@ -17,11 +17,12 @@ const Places = () => {
             if (isAuthenticated) {
                 const idToken = await getIdTokenClaims()
                 const places = await getPlaces(idToken.__raw)
+                setLoadedPlaces(places)
             }
         }
 
         fetchPlaces()
-    })
+    },[])
     // const { isLoading, error, sendRequest, clearError } = useHttpClient()
     // const userId = useParams().userId
 
@@ -44,26 +45,20 @@ const Places = () => {
     // }
 
     return <React.Fragment>
-        <h1>Places</h1>
 
         {!isAuthenticated &&
             <h3>Please login for view the places.</h3>
-
         }
 
-        {/* <ErrorModal error={error} onClear={clearError} />
-        {isLoading && (
-            <div className="center">
-                <LoadingSpinner />
-            </div>
-        )}
         {
-            !isLoading &&
             loadedPlaces &&
             (
-                <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
+                <PlaceList
+                    items={loadedPlaces}
+                // onDeletePlace={placeDeletedHandler} 
+                />
             )
-        } */}
+        }
     </React.Fragment>
 }
 

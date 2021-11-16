@@ -1,9 +1,11 @@
 import Axios from "axios";
 
+const baseURL = "http://localhost:4000/dev"
+
 export async function getPlaces(token) {
 
     const response = await Axios.get(
-        `http://localhost:4000/dev/places`,
+        `${baseURL}/places`,
         {
             headers: {
                 'Content-Type': 'application/json',

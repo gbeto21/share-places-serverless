@@ -8,22 +8,25 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const NavLinks = props => {
 
-    const { loginWithRedirect } = useAuth0()
+    const { loginWithRedirect, logout } = useAuth0()
     const auth = useContext(AuthContext)
 
     return <ul className="nav-links">
         {auth.isLoggedIn && (<li>
             <NavLink to="/places/new">ADD PLACE</NavLink>
         </li>)}
-        {!auth.isLoggedIn && (<li>
+        {/* {/* {!auth.isLoggedIn &&  */}
+        <li>
             <button onClick={() => loginWithRedirect()}>
                 LOGIN
             </button>
-        </li>)}
-        {auth.isLoggedIn &&
-            <li>
-                <button onClick={auth.logout}>LOGOUT</button>
-            </li>}
+        </li>
+        {/* }  */}
+        {/* {auth.isLoggedIn && */}
+        <li>
+            <button onClick={() => logout()}>LOGOUT</button>
+        </li>
+        {/* } */}
     </ul>
 
 }

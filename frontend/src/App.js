@@ -1,20 +1,37 @@
+import React, { Suspense } from 'react';
+import { useAuth } from './shared/hooks/auth-hooks'
+import { AuthContext } from "./shared/context/auth-context";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import MainNavigation from './shared/components/Navigation/MainNavigation'
+
+// const NewPlace = React.lazy(() => import('./places/pages/NewPlace'))
+// const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'))
+// const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces'))
+
 function App() {
+
+  const { token, login, logout } = useAuth()
+  let routes = (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainNavigation />} exact />
+      </Routes>
+    </BrowserRouter>
+  )
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: !!token,
+        token: token,
+        login: login,
+        logout: logout
+      }}>
+      {/* <MainNavigation /> */}
+      <main>
+        {routes}
+      </main>
+    </AuthContext.Provider>
   );
 }
 

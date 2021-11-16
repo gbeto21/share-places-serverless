@@ -1,18 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
-
-import { AuthContext } from '../../context/auth-context'
-import './NavLinks.css'
-
 import { useAuth0 } from "@auth0/auth0-react";
+import './NavLinks.css'
 
 const NavLinks = props => {
 
     const { loginWithRedirect, logout, isAuthenticated } = useAuth0()
-    const auth = useContext(AuthContext)
 
     return <ul className="nav-links">
-        {auth.isLoggedIn &&
+        {isAuthenticated &&
             <li>
                 <NavLink to="/places/new">ADD PLACE</NavLink>
             </li>
@@ -31,7 +27,6 @@ const NavLinks = props => {
             </li>
         }
     </ul>
-
 }
 
 export default NavLinks

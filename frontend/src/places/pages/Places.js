@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useAuth0 } from "@auth0/auth0-react";
 import PlaceList from '../components/PlaceList'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
@@ -8,6 +9,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook'
 const Places = () => {
 
     const [loadedPlaces, setLoadedPlaces] = useState()
+    const { isAuthenticated } = useAuth0()
     // const { isLoading, error, sendRequest, clearError } = useHttpClient()
     // const userId = useParams().userId
 
@@ -31,6 +33,12 @@ const Places = () => {
 
     return <React.Fragment>
         <h1>Places</h1>
+
+        {!isAuthenticated &&
+            <h3>Please login for view the places.</h3>
+
+        }
+
         {/* <ErrorModal error={error} onClear={clearError} />
         {isLoading && (
             <div className="center">

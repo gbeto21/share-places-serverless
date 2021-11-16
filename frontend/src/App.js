@@ -7,16 +7,14 @@ import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
 // const NewPlace = React.lazy(() => import('./places/pages/NewPlace'))
 // const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'))
-// const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces'))
-const Auth = React.lazy(() => import('./user/pages/Auth'))
+const Places = React.lazy(() => import('./places/pages/Places'))
 
 function App() {
 
   const { token, login, logout } = useAuth()
   let routes = (
     <Routes>
-      <Route path="/" element={<Auth />} exact />
-      <Route path="/auth" element={<Auth />} exact />
+      <Route path="/" element={<Places />} exact />
     </Routes>
   )
 

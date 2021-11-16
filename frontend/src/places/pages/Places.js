@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth0 } from "@auth0/auth0-react";
+import { getPlaces } from "../../api/places";
 import PlaceList from '../components/PlaceList'
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner'
@@ -9,7 +10,18 @@ import { useHttpClient } from '../../shared/hooks/http-hook'
 const Places = () => {
 
     const [loadedPlaces, setLoadedPlaces] = useState()
-    const { isAuthenticated } = useAuth0()
+    const { isAuthenticated, getAccessTokenSilently, getIdTokenClaims } = useAuth0()
+    useEffect(() => {
+        const fetchPlaces = async () => {
+
+            if (isAuthenticated) {
+                const idToken = await getIdTokenClaims()
+                const places = await getPlaces(idToken.__raw)
+            }
+        }
+
+        fetchPlaces()
+    })
     // const { isLoading, error, sendRequest, clearError } = useHttpClient()
     // const userId = useParams().userId
 

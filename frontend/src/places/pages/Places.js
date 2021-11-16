@@ -10,7 +10,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook'
 const Places = () => {
 
     const [loadedPlaces, setLoadedPlaces] = useState()
-    const { isAuthenticated, getAccessTokenSilently, getIdTokenClaims } = useAuth0()
+    const { isAuthenticated, getIdTokenClaims } = useAuth0()
     useEffect(() => {
         const fetchPlaces = async () => {
 

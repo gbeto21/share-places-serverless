@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { createPlace } from "../../api/places";
+import { useAuth0 } from "@auth0/auth0-react";
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal'
@@ -21,15 +22,11 @@ const NewPlace = () => {
   const auth = useContext(AuthContext)
   const { isLoading, error, sendRequest, clearError } = useHttpClient()
   const [formState, inputHandler] = useForm({
-    title: {
+    name: {
       value: '',
       isValid: false
     },
     description: {
-      value: '',
-      isValid: false
-    },
-    address: {
       value: '',
       isValid: false
     },
@@ -39,30 +36,29 @@ const NewPlace = () => {
     }
   }, false)
 
-  const history = useHistory();
+  const { isAuthenticated, getIdTokenClaims } = useAuth0()
+  const navigate = useNavigate();
 
   const placeSubmitHandler = async event => {
     event.preventDefault()
+    console.log("Creating place");
     try {
       const formData = new FormData()
-      formData.append('title', formState.inputs.title.value)
+      formData.append('name', formState.inputs.name.value)
       formData.append('description', formState.inputs.description.value)
-      formData.append('address', formState.inputs.address.value)
       formData.append('image', formState.inputs.image.value)
-      formData.append('lat', 40.7063069)
-      formData.append('lng', -74.010239)
-
-      console.log(formData);
-      await sendRequest(
-        `${process.env.REACT_APP_URL}places`,
-        'POST',
-        formData,
-        {
-          Authorization: 'Bearer ' + auth.token
-        }
-      )
-      history.push('/')
-    } catch (error) { console.log(error); }
+      const name = formData.get("name")
+      const description = formData.get("description")
+      const newPlace =
+      {
+        name,
+        description
+      }
+      console.log(newPlace);
+      const token = await (await getIdTokenClaims()).__raw
+      await createPlace(token, newPlace)
+      navigate('/')
+    } catch (error) { console.log("Error creating place: ", error); }
   }
 
   return (
@@ -71,12 +67,12 @@ const NewPlace = () => {
       <form className="place-form" onSubmit={placeSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
         <Input
-          id="title"
+          id="name"
           element="input"
           type="text"
-          label="Title"
+          label="Name"
           validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid title."
+          errorText="Please enter a valid name."
           onInput={inputHandler}
         />
         <Input
@@ -87,14 +83,6 @@ const NewPlace = () => {
           errorText="Please enter a valid description (at least 5 characters)."
           onInput={inputHandler}
         />
-        <Input
-          id="address"
-          element="input"
-          label="Address"
-          validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid address."
-          onInput={inputHandler}
-        />
         <ImageUpload
           id="image"
           onInput={inputHandler}
@@ -102,7 +90,7 @@ const NewPlace = () => {
         />
         <Button type="submit" disabled={!formState.isValid}>
           ADD PLACE
-      </Button>
+        </Button>
       </form>
     </React.Fragment>
   );

@@ -16,3 +16,13 @@ export async function getPlaces(token) {
     console.log("Places: ", response.data.places);
     return response.data.places
 }
+
+export async function createPlace(token, newPlace) {
+    const response = await Axios.post(`${baseURL}/places`, JSON.stringify(newPlace), {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    return response.data.place
+}

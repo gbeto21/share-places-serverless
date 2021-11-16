@@ -4,8 +4,11 @@ import { NavLink } from 'react-router-dom'
 import { AuthContext } from '../../context/auth-context'
 import './NavLinks.css'
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 const NavLinks = props => {
 
+    const { loginWithRedirect } = useAuth0()
     const auth = useContext(AuthContext)
 
     return <ul className="nav-links">
@@ -13,7 +16,9 @@ const NavLinks = props => {
             <NavLink to="/places/new">ADD PLACE</NavLink>
         </li>)}
         {!auth.isLoggedIn && (<li>
-            <button>LOGIN</button>
+            <button onClick={() => loginWithRedirect()}>
+                LOGIN
+            </button>
         </li>)}
         {auth.isLoggedIn &&
             <li>

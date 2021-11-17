@@ -86,7 +86,7 @@ const NewPlace = () => {
           element="textarea"
           label="Description"
           validators={[VALIDATOR_MINLENGTH(8)]}
-          errorText="Please enter a valid description (at least 5 characters)."
+          errorText="Please enter a valid description (at least 8 characters)."
           onInput={inputHandler}
         />
         <ImageUpload

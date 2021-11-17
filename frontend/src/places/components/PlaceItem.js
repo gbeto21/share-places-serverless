@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { deletePlace } from "../../api/places";
+import { useAuth0 } from "@auth0/auth0-react";
 import Modal from '../../shared/components/UIElements/Modal'
 import Card from '../../shared/components/UIElements/Card'
 import Button from '../../shared/components/FormElements/Button'
@@ -11,6 +13,7 @@ const PlaceItem = props => {
 
     const { isLoading, error, sendRequest, clearError } = useHttpClient()
     const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const { getIdTokenClaims } = useAuth0()
 
     const showDeleteWarningHandler = () => {
         setShowConfirmModal(true)
@@ -22,17 +25,16 @@ const PlaceItem = props => {
 
     const confirmDeleteHandler = async () => {
         setShowConfirmModal(false)
+        console.log("Deleting");
         try {
-            await sendRequest(
-                `${process.env.REACT_APP_URL}places/${props.id}`,
-                'DELETE',
-                null,
-                {
-                    Authorization: 'Bearer '
-                }
-            )
+            const token = await (await getIdTokenClaims()).__raw
+            await deletePlace(token, props.id)
             props.onDelete(props.id)
-        } catch (error) { }
+            console.log("Deleted correctly.");
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
 
     return (

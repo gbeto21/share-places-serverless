@@ -125,12 +125,12 @@ export class PlacesAccess {
             .promise()
 
         //TODO: Implement this logic.
-        // await this.s3
-        //     .deleteObject({
-        //         Bucket: this.s3Bucket,
-        //         Key: placeId
-        //     })
-        //     .promise()
+        await this.s3
+            .deleteObject({
+                Bucket: this.s3Bucket,
+                Key: placeId
+            })
+            .promise()
 
         return result
     }

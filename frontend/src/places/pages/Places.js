@@ -18,7 +18,7 @@ const Places = () => {
 
     useEffect(() => {
         fetchPlaces()
-    }, [])
+    }, [isAuthenticated])
 
     const placeDeletedHandler = deletedPlaceId => {
         fetchPlaces()

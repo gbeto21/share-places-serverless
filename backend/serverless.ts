@@ -1,12 +1,16 @@
 import type { AWS } from '@serverless/typescript';
 
 import { hello } from './src/functions';
-import { getPlaces } from './src/functions';
-import { postPlaces } from './src/functions';
-import { putPlace } from './src/functions';
-import { deletePlace } from './src/functions';
-import { getSignedUrl } from './src/functions';
-import { auth } from './src/functions'
+import {
+  getPlaces,
+  getPlace,
+  postPlaces,
+  putPlace,
+  deletePlace,
+  getSignedUrl,
+  auth
+} from './src/functions';
+
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -56,6 +60,7 @@ const serverlessConfiguration: AWS = {
     hello,
     auth,
     getPlaces,
+    getPlace,
     postPlaces,
     putPlace,
     deletePlace,

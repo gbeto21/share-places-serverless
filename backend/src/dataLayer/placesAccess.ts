@@ -28,6 +28,41 @@ export class PlacesAccess {
         return places as Place[]
     }
 
+    async getPlace(userId: string, placeId: string) {
+
+        let result = {
+            statusCode: 200,
+            body: ''
+        }
+
+        let placeResult = await this.docClient
+            .query({
+                TableName: this.placesTable,
+                KeyConditionExpression: 'userId = :userId AND placeId = :placeId',
+                ExpressionAttributeValues: {
+                    ':userId': userId,
+                    ':placeId': placeId
+                }
+            })
+            .promise()
+
+        logger.info('Place to be upated', placeResult)
+
+        if (placeResult.Items.length === 0) {
+            result = {
+                statusCode: 404,
+                body: 'The place to be upate was not found'
+            }
+        }
+        else {
+            result = {
+                statusCode: 200,
+                body: JSON.stringify(placeResult.Items[0])
+            }
+        }
+        return result
+    }
+
     async postPlace(place: Place): Promise<Place> {
         await this.docClient
             .put({

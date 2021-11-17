@@ -9,10 +9,16 @@ import { parseUserId } from "src/utils/auth/utils";
 const logger = createLogger('places')
 const placessAccess = new PlacesAccess()
 
-export async function getPlaces(pJWT: string): Promise<Place[]> {
-    const userId = parseUserId(pJWT);
+export async function getPlaces(jwkToken: string): Promise<Place[]> {
+    const userId = parseUserId(jwkToken);
     logger.info('Getting places from places logic.')
     return placessAccess.getPlaces(userId)
+}
+
+export async function getPlace(jwkToken: string, placeId: string) {
+    const userId = parseUserId(jwkToken);
+    logger.info('Getting place from places logic.')
+    return placessAccess.getPlace(userId, placeId)
 }
 
 export async function postPlace(pJWT: string, pPlace: PostPlaceRequest) {

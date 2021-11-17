@@ -18,6 +18,20 @@ export async function getPlaces(token) {
     return response.data.places
 }
 
+export async function getPlace(token, idPlace) {
+    const response = await Axios.get(
+        `${baseURL}/places/${idPlace}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+    console.log("Place on api: ", response.data);
+    return response.data
+}
+
 export async function createPlace(token, newPlace) {
     const response = await Axios.post(
         `${baseURL}/places`,

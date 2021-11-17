@@ -6,7 +6,7 @@ import MainNavigation from './shared/components/Navigation/MainNavigation'
 import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 import { Auth0Provider } from "@auth0/auth0-react";
 const NewPlace = React.lazy(() => import('./places/pages/NewPlace'))
-// const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'))
+const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace'))
 const Places = React.lazy(() => import('./places/pages/Places'))
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Places />} exact />
       <Route path="/places/new" element={<NewPlace />} exact />
+      <Route path="/places/:placeId" element={<UpdatePlace />} exact />
     </Routes>
   )
 

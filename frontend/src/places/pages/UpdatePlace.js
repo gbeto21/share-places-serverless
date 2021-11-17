@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  getPlace
+} from "../../api/places";
+import { useAuth0 } from "@auth0/auth0-react";
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import {
@@ -21,11 +24,11 @@ const UpdatePlace = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient()
   const [loadedPlace, setLoadedPlace] = useState()
   const placeId = useParams().placeId;
-  const history = useHistory()
-
+  const navigate = useNavigate();
+  const { getIdTokenClaims } = useAuth0()
   const [formState, inputHandler, setFormData] = useForm(
     {
-      title: {
+      name: {
         value: '',
         isValid: false
       },
@@ -40,25 +43,28 @@ const UpdatePlace = () => {
   useEffect(() => {
     const fetchPlace = async () => {
       try {
-        const responseData = await sendRequest(`${process.env.REACT_APP_URL}places/${placeId}`)
-        setLoadedPlace(responseData.place)
+        const token = await (await getIdTokenClaims()).__raw
+        const place = await getPlace(token, placeId)
+        setLoadedPlace(place)
         setFormData(
           {
-            title: {
-              value: responseData.place.title,
+            name: {
+              value: place.name,
               isValid: true
             },
             description: {
-              value: responseData.place.description,
+              value: place.description,
               isValid: true
             }
           },
           true
         );
-      } catch (error) { }
+      } catch (error) {
+        console.error("Error geting place: ", error);
+      }
     }
     fetchPlace()
-  }, [sendRequest, placeId, setFormData])
+  }, [placeId])
 
   const placeUpdateSubmitHandler = async event => {
     event.preventDefault();
@@ -73,7 +79,7 @@ const UpdatePlace = () => {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + auth.token
       })
-      history.push('/' + auth.userId + '/places')
+      navigate('/')
     } catch (error) { }
   };
 
@@ -102,14 +108,14 @@ const UpdatePlace = () => {
         loadedPlace &&
         <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
           <Input
-            id="title"
+            id="name"
             element="input"
             type="text"
-            label="Title"
+            label="Name"
             validators={[VALIDATOR_REQUIRE()]}
             errorText="Please enter a valid title."
             onInput={inputHandler}
-            initialValue={loadedPlace.title}
+            initialValue={loadedPlace.name}
             initialValid={true}
           />
           <Input
@@ -124,7 +130,7 @@ const UpdatePlace = () => {
           />
           <Button type="submit" disabled={!formState.isValid}>
             UPDATE PLACE
-      </Button>
+          </Button>
         </form>}
     </React.Fragment>
   );

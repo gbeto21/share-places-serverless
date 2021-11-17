@@ -1,6 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPlace } from "../../api/places";
+import {
+  createPlace,
+  getSignedUrl,
+  uploadFile
+} from "../../api/places";
 import { useAuth0 } from "@auth0/auth0-react";
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
@@ -15,12 +19,9 @@ import { useForm } from '../../shared/hooks/form-hook'
 import './PlaceForm.css';
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
-import { AuthContext } from '../../shared/context/auth-context'
-
 const NewPlace = () => {
 
-  const auth = useContext(AuthContext)
-  const { isLoading, error, sendRequest, clearError } = useHttpClient()
+  const { isLoading, error, clearError } = useHttpClient()
   const [formState, inputHandler] = useForm({
     name: {
       value: '',
@@ -36,7 +37,7 @@ const NewPlace = () => {
     }
   }, false)
 
-  const { isAuthenticated, getIdTokenClaims } = useAuth0()
+  const { getIdTokenClaims } = useAuth0()
   const navigate = useNavigate();
 
   const placeSubmitHandler = async event => {
@@ -49,14 +50,19 @@ const NewPlace = () => {
       formData.append('image', formState.inputs.image.value)
       const name = formData.get("name")
       const description = formData.get("description")
+      const file = formData.get("image")
       const newPlace =
       {
         name,
         description
       }
-      console.log(newPlace);
+
       const token = await (await getIdTokenClaims()).__raw
-      await createPlace(token, newPlace)
+      const placeCreated = await createPlace(token, newPlace)
+      const signedUrl = await getSignedUrl(token, placeCreated.placeId)
+      await uploadFile(signedUrl, file)
+      console.log("File uploaded correctly.");
+
       navigate('/')
     } catch (error) { console.log("Error creating place: ", error); }
   }
@@ -79,7 +85,7 @@ const NewPlace = () => {
           id="description"
           element="textarea"
           label="Description"
-          validators={[VALIDATOR_MINLENGTH(5)]}
+          validators={[VALIDATOR_MINLENGTH(8)]}
           errorText="Please enter a valid description (at least 5 characters)."
           onInput={inputHandler}
         />

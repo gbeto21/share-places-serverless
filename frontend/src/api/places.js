@@ -26,3 +26,22 @@ export async function createPlace(token, newPlace) {
     })
     return response.data.place
 }
+
+export async function getSignedUrl(token, idPlace) {
+    const response = await Axios.get(
+        `${baseURL}/signedUrl/${idPlace}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    console.log("Signed URL: ", response.data.uploadUrl);
+    return response.data.uploadUrl
+}
+
+export async function uploadFile(url, file) {
+
+    await Axios.put(url, file)
+
+}

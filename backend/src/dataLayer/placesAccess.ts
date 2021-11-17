@@ -9,7 +9,7 @@ const logger = createLogger('TodosAccess')
 export class PlacesAccess {
     constructor(private readonly docClient: DocumentClient = createDynamoDBClient(),
         private readonly placesTable = process.env.PLACE_TABLE,
-        private readonly s3 = new AWS.S3({ signatureVersion: 'v4' }),
+        private readonly s3 = new AWS.S3({ signatureVersion: 'v4', region: 'us-east-1' }),
         private readonly s3Bucket = process.env.ATTACHMENT_S3_BUCKET,
         private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION) { }
 

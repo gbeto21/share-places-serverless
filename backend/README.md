@@ -1,88 +1,163 @@
-# Serverless - AWS Node.js Typescript
+# Share places - Serverless Backend
 
-This project has been generated using the `aws-nodejs-typescript` template from the [Serverless framework](https://www.serverless.com/).
+Serverless backend project to manage the places.
 
-For detailed instructions, please refer to the [documentation](https://www.serverless.com/framework/docs/providers/aws/).
+## Functionality
 
-## Installation/deployment instructions
+API to fetch, create, update, delete and generate signed urls to upload 
+a image related to the place.
 
-Depending on your preferred package manager, follow the instructions below to deploy your project.
+## Prerequisites
+* <a href="https://github.com" target="_blank">GitHub account</a>
+* <a href="https://nodejs.org/en/download/package-manager/" target="_blank">NodeJS</a> version 16.13.0 
+* Serverless 2.66.1 or higer 
+   * Create a <a href="https://dashboard.serverless.com/" target="_blank">Serverless account</a> user
+   * Install the Serverless Framework’s CLI. Refer to the <a href="https://www.serverless.com/framework/docs/getting-started/" target="_blank">official documentation</a> for more help.
+   ```bash
+   npm install -g serverless
+   serverless --version
+   ```
+   * Login and configure serverless to use the AWS credentials 
+   ```bash
+   # Login to your dashboard from the CLI. It will ask to open your browser and finish the process.
+   serverless login
+   # Configure serverless to use the AWS credentials to deploy the application
+   # You need to have a pair of Access key (YOUR_ACCESS_KEY_ID and YOUR_SECRET_KEY) of an IAM user with Admin access permissions
+   sls config credentials --provider aws --key YOUR_ACCESS_KEY_ID --secret YOUR_SECRET_KEY --profile serverless
+   ```
 
-> **Requirements**: NodeJS `lts/erbium (v.12.19.0)`. If you're using [nvm](https://github.com/nvm-sh/nvm), run `nvm use` to ensure you're using the same Node version in local and in your lambda's runtime.
+## Initialice proyect locally
 
-### Using NPM
-
-- Run `npm i` to install the project dependencies
-- Run `npx sls deploy` to deploy this stack to AWS
-
-### Using Yarn
-
-- Run `yarn` to install the project dependencies
-- Run `yarn sls deploy` to deploy this stack to AWS
-
-## Test your service
-
-This template contains a single lambda function triggered by an HTTP request made on the provisioned API Gateway REST API `/hello` route with `POST` method. The request body must be provided as `application/json`. The body structure is tested by API Gateway against `src/functions/hello/schema.ts` JSON-Schema definition: it must contain the `name` property.
-
-- requesting any other path than `/hello` with any other method than `POST` will result in API Gateway returning a `403` HTTP error code
-- sending a `POST` request to `/hello` with a payload **not** containing a string property named `name` will result in API Gateway returning a `400` HTTP error code
-- sending a `POST` request to `/hello` with a payload containing a string property named `name` will result in API Gateway returning a `200` HTTP status code with a message saluting the provided name and the detailed event processed by the lambda
-
-> :warning: As is, this template, once deployed, opens a **public** endpoint within your AWS account resources. Anybody with the URL can actively execute the API Gateway endpoint and the corresponding lambda. You should protect this endpoint with the authentication method of your choice.
-
-### Locally
-
-In order to test the hello function locally, run the following command:
-
-- `npx sls invoke local -f hello --path src/functions/hello/mock.json` if you're using NPM
-- `yarn sls invoke local -f hello --path src/functions/hello/mock.json` if you're using Yarn
-
-Check the [sls invoke local command documentation](https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/) for more information.
-
-### Remotely
-
-Copy and replace your `url` - found in Serverless `deploy` command output - and `name` parameter in the following `curl` command in your terminal or in Postman to test your newly deployed application.
+To initialice the application locally run the following commands in the root of the project:
 
 ```
-curl --location --request POST 'https://myApiEndpoint/dev/hello' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "Frederic"
-}'
+# Install the npm dependencies
+npm install
+
+# Start the local environment
+serverless offline start
 ```
 
-## Template features
+You can configure the "custom" object of the serverless.ts file to chose a specific port for the DynamoDB and server port.
 
-### Project structure
+## Endpoints
 
-The project code base is mainly located within the `src` folder. This folder is divided in:
+**All the endpoints need a token in order to validate the user.**
 
-- `functions` - containing code base and configuration for your lambda functions
-- `libs` - containing shared code base between your lambdas
+This API exposes the next endpoints:
 
+
+### Get places
+
+`GET /dev/places/`
+#### Body
+```json
+{}
 ```
-.
-├── src
-│   ├── functions            # Lambda configuration and source code folder
-│   │   ├── hello
-│   │   │   ├── handler.ts   # `Hello` lambda source code
-│   │   │   ├── index.ts     # `Hello` lambda Serverless configuration
-│   │   │   ├── mock.json    # `Hello` lambda input parameter, if any, for local invocation
-│   │   │   └── schema.ts    # `Hello` lambda input event JSON-Schema
-│   │   │
-│   │   └── index.ts         # Import/export of all lambda configurations
-│   │
-│   └── libs                 # Lambda shared code
-│       └── apiGateway.ts    # API Gateway specific helpers
-│
-├── package.json
-├── serverless.ts            # Serverless service file
-├── tsconfig.json            # Typescript compiler configuration
-└── webpack.config.js        # Webpack configuration
+#### Response
+```json
+{
+    "places": [
+        {
+            "placeId": "3e6a501c-ba44-4986-9d17-da2bb139afb1",
+            "name": "Example place",
+            "description": "Awesome place",
+            "userId": "google-oauth2|101284071362295645843",
+            "imageUrl": ""
+        }
+    ]
+}
 ```
 
-### 3rd party librairies
+### Get place
 
-- [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts) - uses JSON-Schema definitions used by API Gateway for HTTP request validation to statically generate TypeScript types in your lambda's handler code base
-- [middy](https://github.com/middyjs/middy) - middleware engine for Node.Js lambda. This template uses [http-json-body-parser](https://github.com/middyjs/middy/tree/master/packages/http-json-body-parser) to convert API Gateway `event.body` property, originally passed as a stringified JSON, to its corresponding parsed object
-- [@serverless/typescript](https://github.com/serverless/typescript) - provides up-to-date TypeScript definitions for your `serverless.ts` service file
+`GET /dev/places/{placeId}`
+
+#### Response
+```json
+{
+    "placeId": "3e6a501c-ba44-4986-9d17-da2bb139afb1",
+    "name": "Example place",
+    "description": "Awesome place",
+    "userId": "google-oauth2|101284071362295645843",
+    "imageUrl": ""
+}
+```
+
+### Create a place
+
+`POST /dev/places`
+#### Body
+```json
+{
+    "name": "Example place",
+    "description": "Awesome place"
+}
+```
+#### Response
+```json
+{
+    "placeId": "3e6a501c-ba44-4986-9d17-da2bb139afb1",
+    "name": "Example place",
+    "description": "Awesome place",
+    "userId": "google-oauth2|101284071362295645843",
+    "imageUrl": ""
+}
+```
+
+### Update a place
+
+`PUT /dev/places`
+#### Body
+```json
+{
+    "name": "An upated place.",
+    "description": "Great place to hollydays."
+}
+```
+#### Response
+```json
+{}
+```
+
+### Update a place
+
+`PUT /dev/places/{placeId}`
+#### Body
+```json
+{
+    "name": "An upated place.",
+    "description": "Great place to hollydays."
+}
+```
+#### Response
+```json
+{}
+```
+
+### Delete a place
+
+`DELETE /dev/places/{placeId}`
+#### Body
+```json
+{}
+```
+#### Response
+```json
+{}
+```
+**Note:** When a place is deleted the image in the S3 bucket is also deleted.
+
+### Get signed url
+
+`GET /dev/signedUrl/{}`
+#### Body
+```json
+{}
+```
+#### Response
+```json
+{
+    "uploadUrl": "https://places-dev.s3.amazonaws.com/14d1e2cf-8af6-41f8-8bd0-aa2d99849687?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAZ5E2WLF5VRZO5M42%2F20211117%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211117T210832Z&X-Amz-Expires=650&X-Amz-Signature=02035da3df5de796b379b9cfb7140aecb8950adef8fc569566bda79aac80809d&X-Amz-SignedHeaders=host"
+}
+```

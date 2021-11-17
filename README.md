@@ -1,6 +1,6 @@
 # Share places - Serverless
 
-To implement this project, you need to implement a simple TODO application using AWS Lambda and Serverless framework.
+Share your favorite places with the app.
 
 ## Functionality 
 
@@ -37,16 +37,17 @@ The places properties contains the following fields:
    ```
 
 ## Repo structure
-This repo contains the backend and the front end repositories.
+This repo contains the backend and the front end repositories, for more detailed info, please check the
+READMEs in each folder.
 
 ### Backend
 
-To deploy an application run the following commands:
+To start locally the application run the following commands:
 
 ```
 cd backend
 npm install
-sls deploy -v
+serverless offline start
 ```
 
 ### Frontend

@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import config from "./Config.json";
 import { useAuth } from './shared/hooks/auth-hooks'
 import { AuthContext } from "./shared/context/auth-context";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -22,8 +23,8 @@ function App() {
 
   return (
     <Auth0Provider
-      domain='dev-07sod58o.us.auth0.com'
-      clientId='AUddevsAFkqdnYouTabbt76PYbLkdn64'
+      domain={config.domanin}
+      clientId={config.clientId}
       redirectUri={window.location.origin}
     >
       <AuthContext.Provider

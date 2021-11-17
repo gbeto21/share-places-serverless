@@ -1,6 +1,7 @@
 import Axios from "axios";
+import config from "../Config.json";
 
-const baseURL = "http://localhost:4000/dev"
+const baseURL = config.baseURL
 
 export async function getPlaces(token) {
 

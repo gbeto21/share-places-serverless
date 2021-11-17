@@ -37,7 +37,7 @@ const NewPlace = () => {
     }
   }, false)
 
-  const { getIdTokenClaims } = useAuth0()
+  const { getIdTokenClaims, isAuthenticated } = useAuth0()
   const navigate = useNavigate();
 
   const placeSubmitHandler = async event => {
@@ -69,35 +69,44 @@ const NewPlace = () => {
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={clearError} />
-      <form className="place-form" onSubmit={placeSubmitHandler}>
-        {isLoading && <LoadingSpinner asOverlay />}
-        <Input
-          id="name"
-          element="input"
-          type="text"
-          label="Name"
-          validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid name."
-          onInput={inputHandler}
-        />
-        <Input
-          id="description"
-          element="textarea"
-          label="Description"
-          validators={[VALIDATOR_MINLENGTH(8)]}
-          errorText="Please enter a valid description (at least 8 characters)."
-          onInput={inputHandler}
-        />
-        <ImageUpload
-          id="image"
-          onInput={inputHandler}
-          errorText="Please provide an image."
-        />
-        <Button type="submit" disabled={!formState.isValid}>
-          ADD PLACE
-        </Button>
-      </form>
+      {!isAuthenticated &&
+        <h3>Please login for add places.</h3>
+      }
+      {
+        isAuthenticated &&
+        (<React.Fragment>
+          <ErrorModal error={error} onClear={clearError} />
+          <form className="place-form" onSubmit={placeSubmitHandler}>
+            {isLoading && <LoadingSpinner asOverlay />}
+            <Input
+              id="name"
+              element="input"
+              type="text"
+              label="Name"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Please enter a valid name."
+              onInput={inputHandler}
+            />
+            <Input
+              id="description"
+              element="textarea"
+              label="Description"
+              validators={[VALIDATOR_MINLENGTH(8)]}
+              errorText="Please enter a valid description (at least 8 characters)."
+              onInput={inputHandler}
+            />
+            <ImageUpload
+              id="image"
+              onInput={inputHandler}
+              errorText="Please provide an image."
+            />
+            <Button type="submit" disabled={!formState.isValid}>
+              ADD PLACE
+            </Button>
+          </form>
+        </React.Fragment>
+        )
+      }
     </React.Fragment>
   );
 };

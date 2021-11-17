@@ -46,6 +46,20 @@ export async function createPlace(token, newPlace) {
     return response.data.place
 }
 
+export async function updatePlace(token, updatedPlace) {
+    const response = await Axios.put(
+        `${baseURL}/places/${updatedPlace.placeId}`,
+        JSON.stringify(updatedPlace),
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+    )
+    return response.data
+}
+
 export async function deletePlace(token, idPlace) {
     const response = await Axios.delete(
         `${baseURL}/places/${idPlace}`,

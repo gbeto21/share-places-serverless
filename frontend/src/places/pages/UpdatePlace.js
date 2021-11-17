@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  getPlace
+  getPlace,
+  updatePlace
 } from "../../api/places";
 import { useAuth0 } from "@auth0/auth0-react";
 import Input from '../../shared/components/FormElements/Input';
@@ -68,19 +69,32 @@ const UpdatePlace = () => {
 
   const placeUpdateSubmitHandler = async event => {
     event.preventDefault();
+    console.log("Updating the place.");
     try {
-      await sendRequest(
-        `${process.env.REACT_APP_URL}places/${placeId}`,
-        'PATCH',
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value
-        }), {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + auth.token
-      })
+      const token = await (await getIdTokenClaims()).__raw
+      const placeToUpdate = {
+        ...loadedPlace,
+        name: formState.inputs.name.value,
+        description: formState.inputs.description.value
+      }
+      console.log("New data: ", placeToUpdate);
+      await updatePlace(token, placeToUpdate)
+      console.log("Place updated correctly.");
+      // await sendRequest(
+      //   `${process.env.REACT_APP_URL}places/${placeId}`,
+      //   'PATCH',
+      //   JSON.stringify({
+      //     title: formState.inputs.title.value,
+      //     description: formState.inputs.description.value
+      //   }), {
+      //   'Content-Type': 'application/json',
+      //   Authorization: 'Bearer ' + auth.token
+      // })
       navigate('/')
-    } catch (error) { }
+    }
+    catch (error) {
+      console.error("Error updating the place: ", error);
+    }
   };
 
   if (isLoading) {
@@ -122,8 +136,8 @@ const UpdatePlace = () => {
             id="description"
             element="textarea"
             label="Description"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="Please enter a valid description (min. 5 characters)."
+            validators={[VALIDATOR_MINLENGTH(8)]}
+            errorText="Please enter a valid description (min. 8 characters)."
             onInput={inputHandler}
             initialValue={loadedPlace.description}
             initialValid={true}

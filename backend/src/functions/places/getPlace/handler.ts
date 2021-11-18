@@ -1,5 +1,4 @@
 import 'source-map-support'
-import { middyfy } from '@libs/lambda'
 import { getPlace } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { getToken } from 'src/utils/auth/auth';
@@ -11,7 +10,7 @@ const handler: any = async (event) => {
     try {
 
         console.log("Getting single place.");
-        
+
         logger.info('Getting place to be founded: ', { event })
 
         const placeId = event.pathParameters.placeId
@@ -23,7 +22,11 @@ const handler: any = async (event) => {
 
         return {
             statusCode: result.statusCode,
-            body: result.body
+            body: result.body,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
+            },
         }
     } catch (error) {
         console.error(error);
@@ -36,4 +39,4 @@ const handler: any = async (event) => {
 
 }
 
-export const main = middyfy(handler)
+export const main = handler

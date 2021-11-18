@@ -8,7 +8,18 @@ export default {
         authorizer: {
           name: 'auth'
         }
-      }
+      },
+      cors: true
     }
-  ]
+  ],
+  iamRoleStatements: [
+    {
+      Effect: 'Allow',
+      Action: [
+        'dynamodb:Query',
+        'dynamodb:UpdateItem'
+      ],
+      Resource: `arn:aws:dynamodb:us-east-1:*:table/Place-dev`
+    }
+  ],
 }

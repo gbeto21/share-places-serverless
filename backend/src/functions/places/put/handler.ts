@@ -1,5 +1,4 @@
 import 'source-map-support'
-import { middyfy } from '@libs/lambda'
 import { putPlace } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { PutPlaceRequest } from "src/requests/PutPlaceRequest";
@@ -27,6 +26,10 @@ const handler: any = async (event) => {
 
         return {
             statusCode: result.statusCode,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
+            },
             body: result.body
         }
     } catch (error) {
@@ -40,4 +43,4 @@ const handler: any = async (event) => {
 
 }
 
-export const main = middyfy(handler)
+export const main = handler

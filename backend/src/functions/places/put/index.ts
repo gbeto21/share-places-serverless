@@ -15,7 +15,18 @@ export default {
             'application/json': schema
           }
         }
-      }
+      },
+      cors: true
     }
-  ]
+  ],
+  iamRoleStatements: [
+    {
+      Effect: 'Allow',
+      Action: [
+        'dynamodb:PutItem',
+        'dynamodb:UpdateItem'
+      ],
+      Resource: `arn:aws:dynamodb:us-east-1:*:table/Place-dev`
+    }
+  ],
 }

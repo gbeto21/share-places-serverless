@@ -1,5 +1,4 @@
 import 'source-map-support'
-import { middyfy } from '@libs/lambda'
 import { generateUploadURL } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { getToken } from 'src/utils/auth/auth';
@@ -23,6 +22,10 @@ const getSignedUrl: any = async (event) => {
 
         return {
             statusCode: result.statusCode,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
+            },
             body: JSON.stringify({
                 uploadUrl: result.body
             })
@@ -38,4 +41,4 @@ const getSignedUrl: any = async (event) => {
 
 }
 
-export const main = middyfy(getSignedUrl)
+export const main = getSignedUrl

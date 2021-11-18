@@ -1,5 +1,4 @@
 import 'source-map-support/register'
-import { middyfy } from '@libs/lambda'
 import { postPlace } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { PostPlaceRequest } from 'src/requests/PostPlaceRequest';
@@ -17,6 +16,10 @@ const handler: any = async (event) => {
         logger.info('Place created', place)
         return {
             statusCode: 201,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
+            },
             body: JSON.stringify({
                 place
             })
@@ -32,4 +35,4 @@ const handler: any = async (event) => {
     }
 }
 
-export const main = middyfy(handler)
+export const main = handler

@@ -3,22 +3,9 @@ import config from "../Config.json";
 
 const baseURL = config.baseURL
 
-async function SayHello(token) {
-    const responseHello = await Axios.get(
-        `${baseURL}/hello`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-    console.log("Hello response: ", responseHello.data);
-}
-
 export async function getPlaces(token) {
 
     console.log("Token to get places: ", token);
-    SayHello(token)
     const response = await Axios.get(
         `${baseURL}/places`,
         {

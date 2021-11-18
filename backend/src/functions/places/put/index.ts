@@ -23,6 +23,7 @@ export default {
     {
       Effect: 'Allow',
       Action: [
+        'dynamodb:Query',
         'dynamodb:PutItem',
         'dynamodb:UpdateItem'
       ],

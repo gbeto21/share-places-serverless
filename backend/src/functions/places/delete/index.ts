@@ -9,7 +9,25 @@ export default {
           name: 'auth'
         },
         request: {}
-      }
+      },
+      cors: true
     }
-  ]
+  ],
+  iamRoleStatements: [
+    {
+      Effect: 'Allow',
+      Action: [
+        'dynamodb:Query',
+        'dynamodb:DeleteItem'
+      ],
+      Resource: `arn:aws:dynamodb:us-east-1:*:table/Place-dev`
+    },
+    {
+      Effect: 'Allow',
+      Action: [
+        's3:DeleteObject',
+      ],
+      Resource: `arn:aws:s3:::places-dev/*`
+    },
+  ],
 }

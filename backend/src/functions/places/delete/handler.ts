@@ -1,5 +1,4 @@
 import 'source-map-support'
-import { middyfy } from "@libs/lambda";
 import { deletePlace } from 'src/businessLogic/places';
 import { createLogger } from "../../../utils/logger";
 import { getToken } from 'src/utils/auth/auth';
@@ -20,7 +19,10 @@ const handler: any = async (event) => {
         logger.info('Place updated', result)
 
         return {
-            statusCode: result.statusCode,
+            statusCode: result.statusCode, headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
+            },
             body: result.body
         }
 
@@ -35,4 +37,4 @@ const handler: any = async (event) => {
 
 }
 
-export const main = middyfy(handler)
+export const main = handler

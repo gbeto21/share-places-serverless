@@ -1,5 +1,5 @@
 {
-    "baseURL": "http://localhost:4000/dev",
+    "baseURL": "https://6z4tk1mc4l.execute-api.us-east-1.amazonaws.com/dev",
     "domanin": "dev-07sod58o.us.auth0.com",
     "clientId": "AUddevsAFkqdnYouTabbt76PYbLkdn64"
 }

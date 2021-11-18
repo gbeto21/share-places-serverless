@@ -37,7 +37,12 @@ const serverlessConfiguration: AWS = {
       includeModules: true
     }
   },
-  plugins: ['serverless-webpack', 'serverless-offline', 'serverless-dynamodb-local'],
+  plugins: [
+    'serverless-webpack',
+    'serverless-iam-roles-per-function',
+    'serverless-offline',
+    'serverless-dynamodb-local'
+  ],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',

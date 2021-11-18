@@ -1,5 +1,4 @@
 import 'source-map-support/register';
-import { middyfy } from '@libs/lambda';
 import { getPlaces } from "../../../businessLogic/places";
 import { createLogger } from "../../../utils/logger";
 import { getToken } from 'src/utils/auth/auth';
@@ -10,13 +9,19 @@ const handler: any = async (event) => {
 
   try {
     const jwtToken = getToken(event)
+    console.log("Token get places: ", jwtToken);
+
     let places = []
     if (jwtToken) {
       places = await getPlaces(jwtToken)
     }
 
     return {
-      statusCode: 201,
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+      },
       body: JSON.stringify({ places })
     }
 
@@ -29,4 +34,4 @@ const handler: any = async (event) => {
   }
 }
 
-export const main = middyfy(handler);
+export const main = handler;

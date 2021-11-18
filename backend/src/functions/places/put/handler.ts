@@ -15,7 +15,7 @@ const handler: any = async (event) => {
         const placeId = event.pathParameters.placeId
         logger.info('Place id: ', placeId)
 
-        const parsePlace: PutPlaceRequest = event.body
+        const parsePlace: PutPlaceRequest = JSON.parse(event.body)
         logger.info('Place to be updated: ', {
             parsePlace
         })

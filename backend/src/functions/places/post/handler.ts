@@ -10,7 +10,9 @@ const handler: any = async (event) => {
 
     try {
 
-        const parsedPlace: PostPlaceRequest = event.body
+        logger.info("Event body received: ", event.body)
+        const parsedPlace: PostPlaceRequest = JSON.parse(event.body)
+        logger.info("Event body parced: ", parsedPlace)
         const jwtToken = getToken(event)
         const place = await postPlace(jwtToken, parsedPlace)
         logger.info('Place created', place)
